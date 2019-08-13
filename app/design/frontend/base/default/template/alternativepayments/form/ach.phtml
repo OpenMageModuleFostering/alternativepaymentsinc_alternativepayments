@@ -1,0 +1,184 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Alternative Payments Inc (http://www.alternativepayments.com)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+ 
+ 
+   $clientaccount = Mage::getStoreConfig('payment/alternativepayments/clientaccount',Mage::app()->getStore());
+   $keyaccount = Mage::getStoreConfig('payment/alternativepayments/keyaccount',Mage::app()->getStore());
+ 
+?>
+
+<script type="text/javascript">
+//<![CDATA[
+
+    // show popup window with info - Signature  
+    function togglePhoneValToolTip(event){
+        if($('ach-make-tool-tip')){
+            $('ach-make-tool-tip').setStyle({
+                top: (Event.pointerY(event)-800)+'px'//,
+              //  left: (Event.pointerX(event)+100)+'px'
+            })
+            $('ach-make-tool-tip').toggle();
+        }
+        Event.stop(event);
+    }
+    if($('ach-make-tool-tip-close')){
+       Event.observe($('ach-make-tool-tip-close'), 'click', togglePhoneValToolTip);
+   }
+    
+    $$('.ach-phone-verf-make-tool').each(function(element){
+        Event.observe(element, 'click', togglePhoneValToolTip);
+    }); 
+    
+
+
+Validation.add('validate-ach-ssn', '<?php echo __('Please enter the last 4 digits of your Social Security Number') ?>', {
+     minLength : 4
+});
+
+Validation.add('validate-ach-phone-verf-num', "<?php echo __('Phone Verification Number should be 8 digits') ?>", {
+     minLength : 8
+});
+
+//]]>
+</script>
+
+<div class="tool-tip" id="ach-make-tool-tip" style="display:none;">
+    <div class="btn-close"><a href="#" id="ach-make-tool-tip-close" title="<?php echo $this->__('Close') ?>"><?php echo $this->__('Close') ?></a></div>
+    <div class="tool-tip-content ach-tool-tip-content">
+        <strong><?php echo $this->__('Phone Verification - Description') ?></strong>
+            <br><br>        
+                <center>
+                    <table>
+                        <tbody>
+                            <tr>                    
+                                <td>
+                                    <img src="<?php echo $this->getSkinUrl('alternativepayments/images/phoneverf1.jpg') ?>" />
+                                </td>
+                                <td class="last"> 
+                                    <?php echo $this->__('To get phone verification number, enter your phone number, choose your method, and click "Continue" button') ?>                                          
+                                </td>
+                            </tr> 
+                            <tr>                    
+                                <td>
+                                    <img src="<?php echo $this->getSkinUrl('alternativepayments/images/phoneverf2.jpg') ?>" />
+                                </td>
+                                <td class="last">
+                                    <?php echo $this->__('You will receive a call or text message from our system telling you the PIN number') ?>                                   
+                                </td>
+                            </tr> 
+                            <tr>                    
+                                <td>
+                                    <img src="<?php echo $this->getSkinUrl('alternativepayments/images/phoneverf3.jpg') ?>" />
+                                </td>
+                                <td class="last">
+                                    <?php echo $this->__('Phone verification number is shown after your phone number is verified') ?>                                         
+                                </td>
+                            </tr> 
+                             <tr>                    
+                                <td>
+                                    <img src="<?php echo $this->getSkinUrl('alternativepayments/images/phoneverf4.jpg') ?>" />
+                                </td>
+                                <td class="last">
+                                    <?php echo $this->__('Enter the phone verification number as shown') ?>       
+                                </td>
+                            </tr>                             
+                            
+                                                           
+                        </tbody>
+                    </table>
+                </center>
+    </div>
+</div>
+
+<ul class="form-list">  
+    <li>  
+    <label for="ach-select" class="required"><em>*</em><?php echo $this->__('Account Type') ?></label>
+    <div class="input-box">    
+        <select id="ach-select" name="payment[ach_accounttype]" class="required-entry">
+            <option value="" selected="selected"><?php echo $this->__('Select Option') ?></option>
+            <option value="PC">Checking</option>
+            <option value="PS">Saving</option>
+        </select>
+    </div>
+    </li>
+      
+    <li>
+        <label for="ach-accountnumber" class="required">
+            <em>*</em><?php echo $this->__('Account Number') ?></label>           
+        <span class="input-box">    
+            <input type="text" class="required-entry validate-digits" maxlength="16" size="16" name="payment[ach_accountnumber]" />            
+        </span><!-- required-entry validate-digits -->
+    </li>
+    <li>
+        <label for="ach-routingnumber" class="required">
+            <em>*</em><?php echo $this->__('Routing Number') ?></label>
+        <span class="input-box">
+            <input type="text" class="required-entry validate-digits" maxlength="11" size="11" name="payment[ach_routingnumber]" />
+        </span><!-- required-entry validate-digits -->
+    </li>
+    <li>
+        <label for="ach-checknumber" class="required">
+            <em>*</em><?php echo $this->__('Check Number') ?></label>
+        <span class="input-box">
+            <input type="text" class="required-entry validate-digits" maxlength="11" size="11" name="payment[ach_checknumber]" />
+        </span>
+    </li>
+    <li>
+        <div class="data-name" id="ach-ssn-field" style="display: none;" >  
+            <label for="ach-ssn" class="required">
+                <em>*</em><?php echo $this->__('Last 4 digits of social secure number') ?></label>
+            <span class="input-box">
+                <input type="text" class="required-entry validate-digits validate-ach-ssn" maxLength="4" size="4" name="payment[ach_ssn]" />
+            </span>
+        </div>
+    </li> 
+
+      <li>
+        <label for="ach-verf" class="required">
+            <em>*</em><?php echo $this->__('Phone Verification Form') ?></label>
+        <span class="input-box" style="width:380px;">
+            
+            <a class="ach-make-tool ach-phone-verf-make-tool" title="<?php echo $this->__('How the signature box works') ?>" href="#">
+                <img src="<?php echo $this->getSkinUrl('alternativepayments/images/qm.gif') ?>" alt="<?php echo $this->__('How phone verfication works') ?>" title="<?php echo $this->__('How phone verfication works') ?>" />
+            </a>
+            
+            <iframe id="phoneVerificationBox" frameborder=0 style="margin:0px;width:360px;height:155px;float:left"
+                src="https://secure.2000charge.com/secure/PhoneVerification/PinCapture.asp?clientaccount=<?php echo $clientaccount ?>&key=<?php echo $keyaccount ?>&bgcolor=FBFAF6&fontcolor=666666&sms=1">
+            </iframe>
+        </span>
+    </li>  
+    <li>
+        <label for="ach-phone-verf-num" class="required">
+            <em>*</em><?php echo $this->__('Phone Verification Number') ?></label>
+        
+        <span class="input-box">
+            <input type="text" class="required-entry validate-digits validate-ach-phone-verf-num" maxlength="8" size="8" name="payment[ach_phone_verf_num]" />
+
+        </span>
+    </li>    
+</ul>
+
+

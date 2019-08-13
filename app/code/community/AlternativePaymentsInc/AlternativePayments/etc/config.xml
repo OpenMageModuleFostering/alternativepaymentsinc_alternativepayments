@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * @category    Payment Method
+ * @package     AlternativePaymentsInc_AlternativePayments
+ * @copyright   Copyright (c) 2012 Alternative Payments Inc (http://www.alternativepayments.com)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+-->
+<config>
+  <modules>
+    <AlternativePaymentsInc_AlternativePayments>
+      <version>1.0.0</version>
+    </AlternativePaymentsInc_AlternativePayments>
+  </modules>
+
+  <global>
+    <fieldsets>
+         <sales_convert_quote_payment>
+            <alternativepayments_type_name>
+                <to_order_payment>*</to_order_payment>
+            </alternativepayments_type_name>
+         </sales_convert_quote_payment>
+    </fieldsets>  
+    <models>
+        <alternativepayments>
+            <class>AlternativePaymentsInc_AlternativePayments_Model</class>
+            <resourceModel>alternativepayments_mysql4</resourceModel>
+        </alternativepayments>
+        <alternativepayments_mysql4>
+            <class>AlternativePaymentsInc_AlternativePayments_Model_Mysql4</class>
+            <entities>
+                <dbsource>
+                    <table>alternativepayments_resource</table>
+                </dbsource>
+                <dbiban>
+                    <table>alternativepayments_iban</table>
+                </dbiban>
+            </entities>
+        </alternativepayments_mysql4>
+    </models>   
+    <resources>
+        <alternativepayments_setup>
+            <setup>
+                <module>AlternativePaymentsInc_AlternativePayments</module>
+                <class>AlternativePaymentsInc_AlternativePayments_Model_Resource_Setup</class>
+            </setup>
+        </alternativepayments_setup>
+         <alternativepayments_write>
+            <connection>
+                <use>core_write</use>
+            </connection>
+        </alternativepayments_write>
+        <alternativepayments_read>
+            <connection>
+                <use>core_read</use>
+            </connection>
+        </alternativepayments_read>
+    </resources>
+    <helpers>
+      <alternativepayments>
+        <class>AlternativePaymentsInc_AlternativePayments_Helper</class>
+      </alternativepayments>
+    </helpers>
+    <blocks>
+      <alternativepayments>
+        <class>AlternativePaymentsInc_AlternativePayments_Block</class>
+      </alternativepayments>
+    </blocks>
+  </global>
+  <default>
+    <payment>
+       <alternativepayments>
+          <model>alternativepayments/standard</model>
+          <active>1</active>
+          <order_status>pending</order_status>
+          <title>Alternative Payments</title>
+          <payment_action>sale</payment_action>
+          <allowspecific>0</allowspecific>
+          <sort_order>33</sort_order>
+          
+          
+        <!--  
+            <ppach>defaultvalue1</ppach>
+            <ppbarpay>defaultvalue2</ppbarpay>         
+            <ppdirectpay>defaultvalue3</ppdirectpay>
+            <ppdirectpaymax>defaultvalue4</ppdirectpaymax>
+         --> 
+          
+            
+       </alternativepayments>
+    </payment>    
+  </default>
+  <frontend>
+        <events>
+        <sales_model_service_quote_submit_before>
+            <observers>
+                <alternativepayments>
+                    <type>singleton</type>
+                    <class>AlternativePaymentsInc_AlternativePayments_Model_Standard</class>
+                    <method>prepare_payment_send</method>
+                </alternativepayments>
+            </observers>
+        </sales_model_service_quote_submit_before>
+    </events>   
+    <translate>
+        <modules>
+            <AlternativePaymentsInc_AlternativePayments>
+                <files>
+                    <default>AlternativePaymentsInc_AlternativePayments.csv</default>
+                </files>
+            </AlternativePaymentsInc_AlternativePayments>
+        </modules>
+    </translate>  
+    <routers>
+       <alternativepayments>
+          <use>standard</use>
+          <args>
+             <module>AlternativePaymentsInc_AlternativePayments</module>
+             <frontName>alternativepayments</frontName>
+          </args>
+       </alternativepayments>
+    </routers>
+    <layout>
+        <updates>
+            <alternativepayments> 
+                <file>alternativepayments.xml</file>
+            </alternativepayments> 
+        </updates>
+    </layout>
+  </frontend>
+  <adminhtml>
+        <translate>
+            <modules>
+                <AlternativePaymentsInc_AlternativePayments>
+                    <files>
+                        <default>AlternativePaymentsInc_AlternativePayments.csv</default>
+                    </files>
+                </AlternativePaymentsInc_AlternativePayments>
+            </modules>
+        </translate>
+    </adminhtml> 
+</config>

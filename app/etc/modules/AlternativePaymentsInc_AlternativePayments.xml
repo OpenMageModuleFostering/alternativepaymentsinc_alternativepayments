@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <AlternativePaymentsInc_AlternativePayments>
+            <active>true</active>
+            <codePool>community</codePool>
+        </AlternativePaymentsInc_AlternativePayments>
+    </modules>
+</config>
