@@ -22,7 +22,7 @@
 <config>
   <modules>
     <AlternativePaymentsInc_AlternativePayments>
-      <version>1.0.1</version>
+      <version>1.0.2</version>
     </AlternativePaymentsInc_AlternativePayments>
   </modules>
 
@@ -89,7 +89,17 @@
           <title>Alternative Payments</title>
           <payment_action>sale</payment_action>
           <allowspecific>0</allowspecific>
-          <sort_order>33</sort_order>      
+          <sort_order>33</sort_order>
+          
+          
+        <!--  
+            <ppach>defaultvalue1</ppach>
+            <ppbarpay>defaultvalue2</ppbarpay>         
+            <ppdirectpay>defaultvalue3</ppdirectpay>
+            <ppdirectpaymax>defaultvalue4</ppdirectpaymax>
+         --> 
+          
+            
        </alternativepayments>
     </payment>    
   </default>
@@ -131,7 +141,10 @@
         </updates>
     </layout>
   </frontend>
+
+ 
   <adminhtml>
+
         <translate>
             <modules>
                 <AlternativePaymentsInc_AlternativePayments>

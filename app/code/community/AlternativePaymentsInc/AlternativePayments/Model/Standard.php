@@ -113,7 +113,7 @@ class AlternativePaymentsInc_AlternativePayments_Model_Standard extends Mage_Pay
              return $errorMsg;
       }
  
-         $order->setSepaSignum($data->getSepaSignum());
+   //      $order->setSepaSignum($data->getSepaSignum());
          $order->setSepaIban($data->getSepaIban());
          $order->setSepaBic($data->getSepaBic()); 
      
@@ -230,7 +230,7 @@ class AlternativePaymentsInc_AlternativePayments_Model_Standard extends Mage_Pay
 
 /**
  * methode for prepere and send infroramtion on service, checking and info client if all ok before place order
- * only for "EPS", "IDEAL", "GIROPAY", "PAYSAFE", "POLI", "PRZELEWY", "QIWI", "TELEINGRESO", "YELLOWPAY" , "DIRECTPAY", "DIRECTPAYMAX", "TELEPAY" - special request
+ * only for "EPS", "IDEAL", "GIROPAY", "PAYSAFE", "POLI", "PRZELEWY", "QIWI", "TELEINGRESO", "YELLOWPAY" - special request
  * 
  * @param Varien_Object $data
  * @return 
@@ -242,11 +242,25 @@ class AlternativePaymentsInc_AlternativePayments_Model_Standard extends Mage_Pay
         $incrementId = $order -> getEntityId();
 
 
+
+
+
+
+
+
+
+
         // filter for payment gateway       
        if (in_array($order->getAlternativepaymentsTypeName(), array("YELLOWPAY", "EPS", "IDEAL", "GIROPAY", "PAYSAFE", 
                                                                          "POLI", "PRZELEWY", "QIWI", "TELEINGRESO"
+                                                                         
                                                                          , "DIRECTPAY", "DIRECTPAYMAX", "TELEPAY"
+
                                                                          ))) {
+
+
+
+
             $amount = $order -> getGrandTotal();
 
             //build request list
@@ -269,6 +283,10 @@ class AlternativePaymentsInc_AlternativePayments_Model_Standard extends Mage_Pay
 
             return -1;
         }
+        
+        
+        
+       
     }
 
 /**
@@ -284,9 +302,13 @@ class AlternativePaymentsInc_AlternativePayments_Model_Standard extends Mage_Pay
         $payment = $order -> getPayment();
         $incrementId = $order -> getEntityId();
 
+    //    $order->setPricePoint($this->getConfigData('pricepoint'));
+
+
+// ----  direct pay gateway method - START !!!!!! -------
         if (in_array($order->getAlternativepaymentsTypeName(), array("SEPA", "EuroDebit", "ACH", "CreditCard", "BARPAY"))) {
                 
-            Mage::log(var_export($order->debug(), TRUE), null,'$cart3.log'); 
+        //    Mage::log(var_export($order->debug(), TRUE), null,'$cart3.log'); 
         
 
             $check = $this -> _getOrderDirectPay($order);
@@ -294,10 +316,53 @@ class AlternativePaymentsInc_AlternativePayments_Model_Standard extends Mage_Pay
 
                 return Mage::getUrl('checkout/onepage/failure', array('_secure' => true)); 
             }
+                      
+// ---- direct pay gateway method - END !!!!!! -----------------------------
+// ---- redirect pay gateway method - START !!!!!! -------------------------
+    /*    } elseif (in_array($order->getAlternativepaymentsTypeName(), array("DIRECTPAY", "CHINADEBIT", 
+                                                                            "BrazilPay",  "DIRECTPAYMAX", "TELEPAY"  "__TEST"))) {
+
+        //  Mage::log(var_export($order->debug(), TRUE), null,'$cart3.log'); 
+          
+            $amount = $order -> getGrandTotal();
+            $cartValues = $this -> _buildRequest($order, $amount);
             
+            list($content, $response) = $this -> _postRequest($order, $cartValues);
+            list($isPaymentAccepted, $message) = $this->_formatPostResult($content);
+                 
+            $responseURL = $response['url'];
+            
+        // ---- redirect pay gateway method - DIRECTPAY and DIRECTPAYMAX only !!!!!! (specific)  --------
+            if (in_array($order->getAlternativepaymentsTypeName(), array("DIRECTPAY", "DIRECTPAYMAX", "TELEPAY" "__TEST"))) {
+                
+                if ($isPaymentAccepted == self::RESPONSE_CODE_DECLINED || $isPaymentAccepted == self::RESPONSE_CODE_ERROR) {
+                    
+                     $order->setStatus(self::STATUS_ERROR);  
+                     $order->save(); 
+                     $orderId = $order-> getReservedOrderId();
+                     $orderOBJ = Mage::getModel('sales/order')->loadByIncrementId("$orderId");
+                     $orderOBJ->setState(Mage_Sales_Model_Order::STATE_CANCELED, true);
+                     $orderOBJ->save();
+                     Mage::throwException(Mage::helper('paygate')->__('Unexpected error: '. $message));
+                } else {
+                    
+                   Mage::getSingleton('alternativepayments/session')->setPostBack(serialize($content));
+                   Mage::getSingleton('alternativepayments/session')->setBackFlag(serialize('TRUE'));
+
+                   return Mage::getUrl('alternativepayments/', array('_secure' => true)); 
+
+                }
+            } else {
+
+               return $responseURL; 
+               
+            }
+*/
+
       // filter for specific payment gateway   
       } elseif (in_array($order->getAlternativepaymentsTypeName(), array("YELLOWPAY", "EPS", "IDEAL", "GIROPAY", "PAYSAFE", 
                                                                          "POLI", "PRZELEWY", "QIWI", "TELEINGRESO"
+                                                                         
                                                                          , "DIRECTPAY", "DIRECTPAYMAX", "TELEPAY"
                                                                           ))) {
 
@@ -316,6 +381,8 @@ class AlternativePaymentsInc_AlternativePayments_Model_Standard extends Mage_Pay
              Mage::throwException(Mage::helper('paygate')->__('Unexpected error'));
         }
         
+  //  return Mage::getUrl(Mage::getSingleton('checkout/session')->getTestField(), array('_secure' => true));
+
     }
 
 /**
@@ -487,7 +554,7 @@ class AlternativePaymentsInc_AlternativePayments_Model_Standard extends Mage_Pay
                      
                             "pricepoint" => $cart->getPricePoint(),
                             "paymenttype" => $cart->getAlternativepaymentsTypeName(),
-                            "signum" => $cart->getSepaSignum(),
+                         //   "signum" => $cart->getSepaSignum(),
                             "iban" => $cart->getSepaIban(),
                             "bic" => $cart->getSepaBic(),
                             );
@@ -593,7 +660,7 @@ class AlternativePaymentsInc_AlternativePayments_Model_Standard extends Mage_Pay
                 } 
                 
                 $fields = $fields + $fields_tmp;
-  //         file_put_contents(Mage::getBaseDir('base')."/var/log/fields$$$.txt", print_r($fields, true), FILE_APPEND);
+           file_put_contents(Mage::getBaseDir('base')."/var/log/fields$$$.txt", print_r($fields, true), FILE_APPEND);
                 return $fields;
             }
         }
@@ -614,7 +681,7 @@ class AlternativePaymentsInc_AlternativePayments_Model_Standard extends Mage_Pay
             $postData = http_build_query($cartValues);
             
             
-   //     file_put_contents(Mage::getBaseDir('base')."/var/log/cartValues$$$.txt", print_r($cartValues, true), FILE_APPEND);          
+        file_put_contents(Mage::getBaseDir('base')."/var/log/cartValues$$$.txt", print_r($cartValues, true), FILE_APPEND);          
             
             $urlToPost  = $cart->getUrlcode();
             // Create a curl request and send the values  
@@ -631,9 +698,9 @@ class AlternativePaymentsInc_AlternativePayments_Model_Standard extends Mage_Pay
             curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
             
             $content = curl_exec($ch); //The string returned  
-   //     file_put_contents(Mage::getBaseDir('base')."/var/log/content$$$.txt", $content, FILE_APPEND);  
+        file_put_contents(Mage::getBaseDir('base')."/var/log/content$$$.txt", $content, FILE_APPEND);  
             $response = curl_getinfo($ch);
-   //     file_put_contents(Mage::getBaseDir('base')."/var/log/response$$$.txt", print_r($response, true), FILE_APPEND);   
+        file_put_contents(Mage::getBaseDir('base')."/var/log/response$$$.txt", print_r($response, true), FILE_APPEND);   
             curl_close ($ch);
 
             if ($response['http_code'] == 301 || $response['http_code'] == 302)
