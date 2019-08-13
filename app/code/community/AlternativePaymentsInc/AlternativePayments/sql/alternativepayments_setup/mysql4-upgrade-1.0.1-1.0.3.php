@@ -26,8 +26,6 @@
  */
 
 
-echo 'Running Upgrade script (mysql4-upgrade-1.0.1-1.0.2.php) for AlternativePaymentsInc_AlternativePayments<br />';   
-
 $installer = $this;
 
 $installer->startSetup();

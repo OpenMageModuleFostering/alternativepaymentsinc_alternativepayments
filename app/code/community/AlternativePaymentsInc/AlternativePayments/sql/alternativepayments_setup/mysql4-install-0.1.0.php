@@ -25,8 +25,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
  
-echo 'Running Insall script (mysql4-install-0.1.0.php) for module AlternativePaymentsInc_AlternativePayments <br />'; 
-
 $installer = $this;
 
 $installer->startSetup();

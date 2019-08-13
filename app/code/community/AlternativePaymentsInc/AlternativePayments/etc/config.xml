@@ -22,7 +22,7 @@
 <config>
   <modules>
     <AlternativePaymentsInc_AlternativePayments>
-      <version>1.0.2</version>
+      <version>1.0.3</version>
     </AlternativePaymentsInc_AlternativePayments>
   </modules>
 
