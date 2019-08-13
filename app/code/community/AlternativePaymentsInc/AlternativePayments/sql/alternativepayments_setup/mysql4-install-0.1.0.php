@@ -31,20 +31,51 @@ $installer = $this;
 
 $installer->startSetup();
 
-$installer->run("
+$conn = $installer->getConnection();
+$prod = 'processing_paid';
 
-    INSERT INTO  `{$this->getTable('sales/order_status')}` (
-        `status`, `label`
-    ) VALUES (
-        'processing_paid', 'Processing (Successfully Paid)'
-    );
-    INSERT INTO  `{$this->getTable('sales/order_status_state')}` (
-        `status`, `state`, `is_default`
-    ) VALUES (
-        'processing_paid', 'processing', '1'
-    );
+$select = $conn
+    ->select()
+    ->from($this->getTable('sales/order_status'))
+    ->where('status = ?', $prod );
+$data1 = $conn->fetchAll($select);
 
-");
+if ($data1) {
+    echo 'In database jet - sales/order_status';
+} else {
+   //echo 'Insert in db - sales/order_status';
+
+    $installer->run("   
+           INSERT INTO  `{$this->getTable('sales/order_status')}` (
+            `status`, `label`
+        ) VALUES (
+            'processing_paid', 'Processing (Successfully Paid)'
+        );
+    "); 
+}
+
+$select = $conn
+    ->select()
+    ->from($this->getTable('sales/order_status_state'))
+    ->where('status = ?', $prod );
+$data2 = $conn->fetchAll($select);
+
+if ($data2) {
+    echo 'In database jet - sales/order_status_state';
+} else {
+   //echo 'Insert in db - sales/order_status_state';
+
+    $installer->run("   
+    
+        INSERT INTO  `{$this->getTable('sales/order_status_state')}` (
+            `status`, `state`, `is_default`
+        ) VALUES (
+            'processing_paid', 'processing', '1'
+        );
+        
+    ");
+  
+}
 
 $installer->endSetup();
 

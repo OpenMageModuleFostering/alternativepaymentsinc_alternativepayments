@@ -24,21 +24,5 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 ?>
-<?php
-// Retrieve order
-//if(Mage::getSingleton('customer/session')->isLoggedIn()):
-    $value1 = Mage::getSingleton('alternativepayments/session')->getYYY(); 
-    $value2 = unserialize(Mage::getSingleton('alternativepayments/session')->getPostBack());  
-    $val2   = unserialize(Mage::getSingleton('alternativepayments/session')->getBackFlag());
-//endif;
- if ($val2 == 'TRUE')  {        
-      echo $this->__('Redirect to payment service...');  
-      $val2 = unserialize(Mage::getSingleton('alternativepayments/session')->setBackFlag(serialize('FALSE')));  
-      echo $value2;
-    } else {
-       Mage::app()->getFrontController()->getResponse()->setRedirect('../checkout/cart/');
-    }
-
-
-?>
-
+   
+<?php echo $this->__('Proceed to SUBMIT ORDER for payment instructions') ?>       

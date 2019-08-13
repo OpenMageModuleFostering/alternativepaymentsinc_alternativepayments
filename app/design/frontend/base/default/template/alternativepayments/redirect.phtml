@@ -28,19 +28,28 @@
 
 // Retrieve order
 
+/*
+    $req_dump = print_r($_POST, TRUE);
+    $fp = fopen(Mage::getBaseDir('base')."/var/log/post!!!.txt", 'a');
+    fwrite($fp, $req_dump);
+    fclose($fp);
+*/
 
    if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["transactionNumber"]) ) {
        
         $validated = $_POST['status'];
            
        if ($_POST['account'] == $_POST['pricepoint']) {
-                
-            if ($_POST['error'] == "" && $validated == "APPROVED") {
-                                
-                    $orderId = $_POST["passthru"];
-                    $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
+     
+            $orderId = $_POST["passthru"];
+            $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
 
-           //         Mage::log(var_export($order->debug(), TRUE), null,'$orderOBJ_post.log');
+            if ($_POST['error'] == "" && $validated == "APPROVED" && $_POST["ip"] == $order->getRemoteIp()) {
+                                
+                //    $orderId = $_POST["passthru"];
+                //    $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
+                    
+               //     Mage::log(var_export($order->debug(), TRUE), null,'$orderOBJ_post.log');
                     
                   //  $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true, 'Gateway has authorized the payment.');
                   //  $order->setStatus('processing_paid');
@@ -75,12 +84,13 @@
         
        if ($_GET['account'] == $_GET['pricepoint']) {
 
-            if ( $_GET['error'] == "" && $validated == "APPROVED") 
+            $orderId = $_GET["passthru"];
+            $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
+
+
+            if ( $_GET['error'] == "" && $validated == "APPROVED" && $_GET["ip"] == $order->getRemoteIp() ) 
             {
-   
-                $orderId = $_GET["passthru"];
-                $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
-                 
+       
          //        Mage::log(var_export($order->debug(), TRUE), null,'$orderOBJ_get_postback.log');
                 
                     if ($order->getState() == "new") {

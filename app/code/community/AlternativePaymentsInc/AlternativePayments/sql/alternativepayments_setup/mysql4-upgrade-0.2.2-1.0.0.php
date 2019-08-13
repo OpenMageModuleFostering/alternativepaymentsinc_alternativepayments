@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-echo 'Running Upgrade script (mysql4-upgrade-0.2.2-0.2.3.php) for AlternativePaymentsInc_AlternativePayments<br />'; 
+echo 'Running Upgrade script (mysql4-upgrade-0.2.2-1.0.0.php) for AlternativePaymentsInc_AlternativePayments<br />'; 
 
 $installer = $this;
 
@@ -59,6 +59,7 @@ $installer->run("
         ( 'PRZELEWY', 'Przelewy24', 'PL', 'emptyValidation' ),
         ( 'TELEINGRESO', 'Teleingreso', 'ES', 'emptyValidation' ),
         ( 'SEPA', 'EuroDebit SEPA', 'BE|BG|CH|CY|CZ|DK|ES|FI|FR|GB|GR|HU|IE|IS|IT|LI|LT|LU|LV|MC|MT|NO|PL|PT|RO|SE|SI|SK', 'sepaValidation' ), 
+        ( 'TELEPAY', 'TelePay', 'MX', 'emptyValidation' ),
         ( 'QIWI', 'QIWI', 'RU', 'emptyValidation' );
         
 ");
