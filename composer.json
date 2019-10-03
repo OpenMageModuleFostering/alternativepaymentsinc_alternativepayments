@@ -1,16 +1,19 @@
 {
-    "name": "OpenMageModuleFostering/AlternativePaymentsInc_AlternativePayments",
+    "name": "OpenMageModuleFostering\/AlternativePaymentsInc_AlternativePayments",
     "type": "magento-module",
     "license": "OSL-v3.0",
     "homepage": "",
     "description": "The number of different payment options worldwide can be confusing and just keeping track of all of them can be tedious work. Alternative Payments provide merchants with simple and easy to use solutions taking the complexity out of the process. ",
     "authors": [
-    {
-        "name": "Alternative Payments Inc",
-        "email": "magento@alternativepayments.com"
-    }
-],
+        {
+            "name": "Alternative Payments Inc",
+            "email": "magento@alternativepayments.com"
+        }
+    ],
     "suggest": {
-        "magento-hackathon/magento-composer-installer": "*"
-    }
+        "magento-hackathon\/magento-composer-installer": "*"
+    },
+    "keywords": [
+        "openmage-module"
+    ]
 }
